@@ -6,7 +6,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.13
-    working_directory: /go/src/fubalapp-new-tournament-service/cmd/run
+    working_directory: /go/src/fubalapp-new-tournament-service
     steps:
       - checkout
       - add_ssh_keys:
@@ -18,7 +18,7 @@ jobs:
           command: go get ./...
       - run:
           name: Build
-          command: go build -o new-tournament
+          command: go build -o new-tournament -i ./cmd/run
       - run:
           name: Add host to known hosts
           command: ssh-keyscan $SSH_HOST >> $HOME/.ssh/known_hosts
