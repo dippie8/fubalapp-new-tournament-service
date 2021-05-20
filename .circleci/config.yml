@@ -25,4 +25,4 @@ jobs:
       - run:
           name: Move binary file
           command: |
-            scp server $SSH_USER@$SSH_HOST:/home/ubuntu/fubalapp
+            scp new-tournament $SSH_USER@$SSH_HOST:/home/ubuntu/fubalapp
