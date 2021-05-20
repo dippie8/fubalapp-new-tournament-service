@@ -19,7 +19,7 @@ type Storage struct {
 }
 
 func NewDB() (s *Storage, err error){
-	yamlFile, err := ioutil.ReadFile("pkg/storage/mongodb/parameters.yml")
+	yamlFile, err := ioutil.ReadFile("parameters.yml")
 	if err != nil {
 		return nil, err
 	}

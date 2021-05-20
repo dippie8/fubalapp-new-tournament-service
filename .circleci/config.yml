@@ -1,0 +1,28 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.13
+    working_directory: /go/src/fubalapp-new-tournament
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "85:85:c9:3a:62:b9:f0:7d:f1:85:d6:dd:1f:d6:48:f2"
+            - "b3:6e:85:62:35:17:00:98:92:ab:18:ef:24:3f:3d:d3"
+      - run:
+          name: Get dependencies
+          command: go get ./...
+      - run:
+          name: Build
+          command: go build -o new-tournament
+      - run:
+          name: Add host to known hosts
+          command: ssh-keyscan $SSH_HOST >> $HOME/.ssh/known_hosts
+      - run:
+          name: Move binary file
+          command: |
+            scp server $SSH_USER@$SSH_HOST:/home/ubuntu/fubalapp
