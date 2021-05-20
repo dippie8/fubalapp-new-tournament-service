@@ -6,7 +6,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.13
-    working_directory: /go/src/fubalapp-new-tournament
+    working_directory: /go/src/fubalapp-new-tournament-service
     steps:
       - checkout
       - add_ssh_keys:
