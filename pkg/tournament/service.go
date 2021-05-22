@@ -1,7 +1,8 @@
-package initializing
+package tournament
 
 import (
 	"sort"
+	"strings"
 )
 
 type Medal int
@@ -28,11 +29,16 @@ type Repository interface {
 type Service interface {
 	RewardPlayers() (Prizes, error)
 	ResetLeague() error
-	//Initialize() (Prizes, error)
+	StartNewTournament() error
+}
+
+type Logger interface {
+	Log(message string) error
 }
 
 type service struct {
 	r Repository
+	l Logger
 }
 
 type Prizes struct {
@@ -41,9 +47,12 @@ type Prizes struct {
 	Third []string
 }
 
-// NewService create a initializing service with dependencies
-func NewService(r Repository) Service {
-	return &service{r}
+// NewService create a tournament service with dependencies
+func NewService(r Repository, l Logger) Service {
+	return &service{
+		r,
+		l,
+	}
 }
 
 // Initialize rewards players and reset standings
@@ -75,6 +84,10 @@ func (s service) RewardPlayers() (prizes Prizes ,err error) {
 			}
 		}
 	}
+
+	s.l.Log("gold medal to: " + strings.Join(prizes.First, ","))
+	s.l.Log("silver medal to: " + strings.Join(prizes.Second, ","))
+	s.l.Log("bronze medal to: " + strings.Join(prizes.Third, ","))
 
 	return prizes, err
 }
@@ -108,6 +121,25 @@ func topThreeRates(standings []Standing) (topRates [3]float32) {
 	}
 
 	return topRates
+}
+
+func (s service) StartNewTournament() error {
+	s.l.Log("starting new tournament...")
+	s.l.Log("rewarding players...")
+	_, err := s.RewardPlayers()
+	if err != nil {
+		s.l.Log("an error occured: " + err.Error())
+		return err
+	}
+	s.l.Log("players rewarded!")
+	s.l.Log("resetting league...")
+	err = s.ResetLeague()
+	if err != nil {
+		s.l.Log("an error occured: " + err.Error())
+		return err
+	}
+	s.l.Log("new tournament started!")
+	return nil
 }
 
 

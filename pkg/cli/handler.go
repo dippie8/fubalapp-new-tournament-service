@@ -1,35 +1,21 @@
 package cli
 
 import (
-	"fmt"
-	"github.com/dippie8/fubalapp-new-tournament/pkg/initializing"
-	"time"
+	"github.com/dippie8/fubalapp-new-tournament/pkg/tournament"
 )
 
 type Handler struct {
-	initializingService initializing.Service
+	initializingService tournament.Service
 }
 
-func NewHandler(service initializing.Service) *Handler {
+func NewHandler(service tournament.Service) *Handler {
 	return &Handler{
 		initializingService: service,
 	}
 }
 
 func (h *Handler) Run() {
-	rewarded, err := h.initializingService.RewardPlayers()
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println(time.Now().String() + ":")
-	fmt.Println("gold medals to:", rewarded.First)
-	fmt.Println("silver medals to:", rewarded.Second)
-	fmt.Println("bronze medals to:", rewarded.Third)
-	fmt.Print("------------------------\n\n")
-
-	err = h.initializingService.ResetLeague()
-
+	err := h.initializingService.StartNewTournament()
 	if err != nil {
 		panic(err)
 	}

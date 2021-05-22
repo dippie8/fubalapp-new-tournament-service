@@ -1,4 +1,4 @@
-package initializing
+package tournament
 
 type Player struct {
 	name 	string	`bson:"_id"`

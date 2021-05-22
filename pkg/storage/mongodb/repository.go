@@ -2,7 +2,7 @@ package mongodb
 
 import (
 	"context"
-	"github.com/dippie8/fubalapp-new-tournament/pkg/initializing"
+	"github.com/dippie8/fubalapp-new-tournament/pkg/tournament"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -44,14 +44,14 @@ func (s Storage) Disconnect() {
 	_ = s.db.Disconnect(s.ctx)
 }
 
-func (s Storage) GetStandings() ([]initializing.Standing, error) {
+func (s Storage) GetStandings() ([]tournament.Standing, error) {
 	collection := s.db.Database("qlsr").Collection("standings")
 	filter := bson.D{}
 	findOptions := options.Find()
 	findOptions.SetSort(bson.D{{"elo", -1}})
 	cursor, err := collection.Find(context.TODO(), filter, findOptions)
 
-	var standings []initializing.Standing
+	var standings []tournament.Standing
 
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (s Storage) GetStandings() ([]initializing.Standing, error) {
 			return nil, err
 		}
 
-		initializingStanding := initializing.Standing{
+		initializingStanding := tournament.Standing{
 			Id:     s.Username,
 			Win:    s.Win,
 			Played: s.Played,
@@ -77,16 +77,16 @@ func (s Storage) GetStandings() ([]initializing.Standing, error) {
 	return standings, nil
 }
 
-func (s Storage) AddPrize(player string, medal initializing.Medal) error {
+func (s Storage) AddPrize(player string, medal tournament.Medal) error {
 	collection := s.db.Database("qlsr").Collection("players")
 
 	var key string
 	switch medal {
-	case initializing.Gold:
+	case tournament.Gold:
 		key = "goldmedals"
-	case initializing.Silver:
+	case tournament.Silver:
 		key = "silvermedals"
-	case initializing.Bronze:
+	case tournament.Bronze:
 		key = "bronzemedals"
 	}
 
