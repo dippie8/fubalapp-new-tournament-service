@@ -141,5 +141,3 @@ func (s service) StartNewTournament() error {
 	s.l.Log("new tournament started!")
 	return nil
 }
-
-

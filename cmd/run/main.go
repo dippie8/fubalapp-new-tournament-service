@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/dippie8/fubalapp-new-tournament/pkg/cli"
 	"github.com/dippie8/fubalapp-new-tournament/pkg/presenter/file"
 	"github.com/dippie8/fubalapp-new-tournament/pkg/storage/mongodb"
 	"github.com/dippie8/fubalapp-new-tournament/pkg/tournament"
@@ -20,17 +19,18 @@ func main() {
 		panic(err)
 	}
 
-	// console logger
+	// file logger
 	logger := file.NewLogger()
 
-	// generic service
+	// abstract service
 	var tournamentInitializer tournament.Service
 
-	// specific service with selected storage
+	// specific service with selected storage and logger
 	tournamentInitializer = tournament.NewService(storage, logger)
 
-	// create and run handler
-	handler := cli.NewHandler(tournamentInitializer)
-	handler.Run()
+	err = tournamentInitializer.StartNewTournament()
+	if err != nil {
+		panic(err)
+	}
 
 }
