@@ -33,7 +33,7 @@ type Service interface {
 }
 
 type Logger interface {
-	Log(message string) error
+	Log(message string)
 }
 
 type service struct {

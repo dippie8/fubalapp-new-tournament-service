@@ -11,8 +11,7 @@ func NewLogger() *Logger{
 	return &Logger{}
 }
 
-func (m *Logger) Log(message string) error {
+func (m *Logger) Log(message string) {
 	datetime := time.Now().String()
 	fmt.Println(datetime + ": " + message)
-	return nil
 }

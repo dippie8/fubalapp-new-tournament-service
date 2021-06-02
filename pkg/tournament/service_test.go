@@ -47,10 +47,9 @@ func (m *mockStorage)  ResetStandings() error {
 	return nil
 }
 
-func (m *mockLogger) Log(message string) error {
+func (m *mockLogger) Log(message string) {
 	datetime := time.Now().String()
 	fmt.Println(datetime + ": " + message)
-	return nil
 }
 
 func Test_service_rewards_standard(t *testing.T) {

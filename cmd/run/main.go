@@ -8,29 +8,26 @@ import (
 
 func main() {
 
-	// Generic storage
-	var storage tournament.Repository
+	// file logger
+	logger := file.NewLogger()
 
 	// MongoDB storage
 	storage, err := mongodb.NewDB()
 	defer storage.Disconnect()
 
 	if err != nil {
+		logger.Log(err.Error())
 		panic(err)
 	}
 
-	// file logger
-	logger := file.NewLogger()
-
-	// abstract service
+	// new tournament service
 	var tournamentInitializer tournament.Service
-
-	// specific service with selected storage and logger
 	tournamentInitializer = tournament.NewService(storage, logger)
 
+	// start new tournament
 	err = tournamentInitializer.StartNewTournament()
 	if err != nil {
+		logger.Log(err.Error())
 		panic(err)
 	}
-
 }
