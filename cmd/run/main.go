@@ -13,12 +13,13 @@ func main() {
 
 	// MongoDB storage
 	storage, err := mongodb.NewDB()
-	defer storage.Disconnect()
 
 	if err != nil {
 		logger.Log(err.Error())
 		panic(err)
 	}
+
+	defer storage.Disconnect()
 
 	// new tournament service
 	var tournamentInitializer tournament.Service

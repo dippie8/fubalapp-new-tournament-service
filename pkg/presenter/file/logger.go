@@ -17,11 +17,10 @@ func (m *Logger) Log(message string) {
 	f, err := os.OpenFile("/var/log/fubalapp/new-tournament",
 		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Println(err)
+		panic(err)
 	}
 	defer f.Close()
 
 	logger := log.New(f, datetime, log.LstdFlags)
 	logger.Println(message)
-
 }
